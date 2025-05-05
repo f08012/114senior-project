@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>西式餐廳管理介面</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header { background-color: #4CAF50; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    .header-left { flex: 1; display: flex; align-items: center; }
+    .header-left button { background: none; border: none; color: white; font-size: 24px; font-weight: bold; cursor: pointer; }
+    .header-center { flex: 2; display: flex; justify-content: center; gap: 30px; }
+    .header-right { flex: 1; display: flex; justify-content: flex-end; }
+    header a, button.menu-button { color: white; text-decoration: none; font-weight: bold; font-size: 16px; background-color: #388E3C; padding: 8px 12px; border-radius: 5px; border: none; cursor: pointer; transition: background-color 0.3s; }
+    header a:hover, button.menu-button:hover, .header-left button:hover { background-color: #2e7d32; }
+    main { padding: 40px; text-align: center; font-size: 20px; color: #666; min-height: 60vh; }
+    .content-section { display: none; }
+    .content-section.active { display: block; }
+    .form-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.left-align-form {
+  flex: 1;
+  text-align: left;
+  max-width: 400px;
+  margin-left: 400px; 
+}
+
+.right-query-form {
+  flex: 1;
+  text-align: left;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+    /* Chatbox */
+    #chatbox-toggle { position: fixed; bottom: 20px; right: 20px; z-index: 9999; background-color: #4CAF50; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 30px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    #chatbox-container { position: fixed; bottom: 90px; right: 20px; width: 90vw; max-width: 400px; height: 60vh; min-width: 280px; min-height: 300px; z-index: 9998; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: none; overflow: hidden; resize: both; animation: slideIn 0.3s ease-out; }
+    #chatbox-header { background-color: #4CAF50; padding: 10px; color: white; cursor: move; user-select: none; border-top-left-radius: 10px; border-top-right-radius: 10px; font-weight: bold; text-align: center; position: relative; }
+    #chatbox-close { position: absolute; top: 5px; right: 10px; color: white; font-weight: bold; cursor: pointer; font-size: 18px; }
+    #chatbox-iframe { width: 100%; height: calc(100% - 40px); border: none; }
+    @keyframes slideIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0px); opacity: 1; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <button onclick="showSection('home')">西式餐廳</button>
+  </div>
+  <div class="header-center">
+    <button class="menu-button" onclick="showSection('brand')">品牌介紹</button>
+    <button class="menu-button" onclick="showSection('menu')">菜單</button>
+    <button class="menu-button" onclick="showSection('customer')">最新消息</button>
+    <button class="menu-button" onclick="showSection('booking')">線上預訂</button>
+  </div>
+  <div class="header-right">
+    <a href="Log in.html">管理者登入</a>
+  </div>
+</header>
+
+<main>
+  <div id="home" class="content-section active">
+    <h1>歡迎來到西式餐廳網站！</h1>
+    <p>請從上方選單進行瀏覽</p>
+  </div>
+  <div id="brand" class="content-section">
+    <h1>品牌介紹</h1>
+    <p>這是品牌介紹頁面，目前尚未建置內容。</p>
+  </div>
+  <div id="menu" class="content-section">
+    <h1>菜單</h1>
+    <p>這是菜單頁面，目前尚未建置內容。</p>
+  </div>
+  <div id="customer" class="content-section" >
+    <h1>顧客瀏覽</h1>
+    <p>這是最新消息頁面，目前尚未建置內容。</p>
+  </div>
+  <div id="booking" class="content-section">
+    <h1>線上預訂</h1>
+    <div class="form-container">
+      <!-- 左側：預約表單 -->
+      <form method="POST" action="http://127.0.0.1/2/submit.php" class="left-align-form">
+        <h2>預約表單</h2>
+        <label>姓名：</label><br>
+        <input type="text" name="name" required><br><br>
+  
+        <label>電話：</label><br>
+        <input type="tel" name="phone" pattern="[0-9]{10}" placeholder="例如：0912345678" required><br><br>
+  
+        <label>預約日期：</label><br>
+        <input type="date" name="date" required><br><br>
+  
+        <label>預約時段：</label><br>
+        <select name="time_slot" required>
+          <option value="09:00 - 10:00">09:00 - 10:00</option>
+          <option value="10:00 - 11:00">10:00 - 11:00</option>
+          <option value="11:00 - 12:00">11:00 - 12:00</option>
+        </select><br><br>
+  
+        <label>人數：</label><br>
+        <input type="number" name="people_count" min="1" required><br><br>
+  
+        <button type="submit" name="submit">送出預約</button>
+      </form>
+  
+      <!-- 右側：電話查詢表單 -->
+      <div class="right-query-form">
+        <form id="queryForm">
+          <h2>電話查詢</h2>
+          <label for="phone">輸入電話查詢預約：</label><br>
+          <input type="text" id="queryPhone" name="phone" required><br><br>
+          <button type="submit">查詢</button>
+        </form>
+      
+        <div id="result" style="margin-top: 20px;"></div>
+      </div>
+</main>
+
+<!-- 客服機器人 -->
+<div id="chatbox-container">
+  <div id="chatbox-header">客服<span id="chatbox-close">&times;</span></div>
+  <iframe id="chatbox-iframe" src="https://www.chatbase.co/chatbot-iframe/gB6NR33mrnaYMLa829_0d"></iframe>
+</div>
+<button id="chatbox-toggle">💬</button>
+
+<script>
+  document.getElementById('queryForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const phone = document.getElementById('queryPhone').value;
+
+  fetch('search.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'phone=' + encodeURIComponent(phone)
+  })
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById('result').innerHTML = data;
+  })
+  .catch(error => {
+    document.getElementById('result').innerHTML = '<p style="color:red;">查詢失敗。</p>';
+  });
+});
+
+function showSection(id) {
+  const sections = document.querySelectorAll('.content-section');
+  sections.forEach(section => {
+    section.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+}
+
+// Chatbox控制
+const toggleBtn = document.getElementById('chatbox-toggle');
+const chatbox = document.getElementById('chatbox-container');
+const closeBtn = document.getElementById('chatbox-close');
+
+if (localStorage.getItem('chatbox-open') === 'true') { chatbox.style.display = 'block'; }
+toggleBtn.addEventListener('click', () => { chatbox.style.display = 'block'; localStorage.setItem('chatbox-open', 'true'); });
+closeBtn.addEventListener('click', () => { chatbox.style.display = 'none'; localStorage.setItem('chatbox-open', 'false'); });
+
+const dragElement = (elmnt, handle) => {
+  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  handle.onmousedown = dragMouseDown;
+  function dragMouseDown(e) { e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY; document.onmouseup = closeDragElement; document.onmousemove = elementDrag; }
+  function elementDrag(e) { e.preventDefault(); pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY; pos3 = e.clientX; pos4 = e.clientY; elmnt.style.top = (elmnt.offsetTop - pos2) + "px"; elmnt.style.left = (elmnt.offsetLeft - pos1) + "px"; elmnt.style.bottom = "auto"; elmnt.style.right = "auto"; }
+  function closeDragElement() { document.onmouseup = null; document.onmousemove = null; }
+}
+dragElement(chatbox, document.getElementById('chatbox-header'));
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+

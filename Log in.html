@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>管理者登錄</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f3f4f6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+  
+      .login-container {
+        background-color: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 320px;
+      }
+  
+      h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+      }
+  
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+      }
+  
+      input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+  
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #1e40af;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+  
+      button:hover {
+        background-color: #1e3a8a;
+      }
+  
+      .error-message {
+        color: red;
+        margin-bottom: 10px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+  <h2>登入</h2>
+  <form id="adminLoginForm">
+    <label for="username">帳號：</label>
+    <input type="text" id="username" required><br><br>
+    
+    <label for="password">密碼：</label>
+    <input type="password" id="password" required><br><br>
+    
+    <button type="submit">登入</button>
+  </form>
+
+  <p id="errorMsg" style="color:red; display:none;">帳號或密碼錯誤</p>
+
+  <script>
+    // 帳號資料包含權限 role
+    const accounts = [
+      { username: "abc", password: "123", role: "abc" },
+      { username: "123", password: "456", role: "123" }
+    ];
+
+    document.getElementById("adminLoginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      const user = accounts.find(account =>
+        account.username === username && account.password === password
+      );
+
+      if (user) {
+        alert("登入成功！");
+
+        // 根據權限導向不同頁面
+        if (user.role === "abc") {
+          window.location.href = "http://127.0.0.1/2/combined_auto_refresh.php?delete=6";
+        } else if (user.role === "123") {
+          window.location.href = "";
+        }
+      } else {
+        document.getElementById("errorMsg").style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
